@@ -3,14 +3,38 @@
   :path: test
   :file: test_ledDriver.c
 :successes:
-- :test: testDriverCreateDebeApagarTodosLosLeds
+- :test: testDriver_LedsOffAfterCreate
   :line: 14
+  :message: ''
+- :test: testDriver_TurnOnledUno
+  :line: 25
+  :message: ''
+- :test: testDriver_TurnOffledUno
+  :line: 37
+  :message: ''
+- :test: testDriver_TurnOnMultiplesLeds
+  :line: 51
+  :message: ''
+- :test: testDriver_TurnOffAnyLed
+  :line: 61
+  :message: ''
+- :test: testDriver_AllOnLed
+  :line: 71
+  :message: ''
+- :test: testDriver_LedsStatus
+  :line: 82
+  :message: ''
+- :test: testDriver_LedsLimits
+  :line: 94
+  :message: ''
+- :test: testDriver_LedsDataVeri
+  :line: 106
   :message: ''
 :failures: []
 :ignores: []
 :counts:
-  :total: 1
-  :passed: 1
+  :total: 9
+  :passed: 9
   :failed: 0
   :ignored: 0
 :stdout:

@@ -30,7 +30,15 @@ char* GlobalOrderError;
 /*=======External Functions This Runner Calls=====*/
 extern void setUp(void);
 extern void tearDown(void);
-extern void testDriverCreateDebeApagarTodosLosLeds();
+extern void testDriver_LedsOffAfterCreate();
+extern void testDriver_TurnOnledUno();
+extern void testDriver_TurnOffledUno();
+extern void testDriver_TurnOnMultiplesLeds();
+extern void testDriver_TurnOffAnyLed();
+extern void testDriver_AllOnLed();
+extern void testDriver_LedsStatus();
+extern void testDriver_LedsLimits();
+extern void testDriver_LedsDataVeri();
 
 
 /*=======Test Reset Option=====*/
@@ -46,7 +54,15 @@ void resetTest(void)
 int main(void)
 {
   UnityBegin("test_ledDriver.c");
-  RUN_TEST(testDriverCreateDebeApagarTodosLosLeds, 14);
+  RUN_TEST(testDriver_LedsOffAfterCreate, 14);
+  RUN_TEST(testDriver_TurnOnledUno, 25);
+  RUN_TEST(testDriver_TurnOffledUno, 37);
+  RUN_TEST(testDriver_TurnOnMultiplesLeds, 51);
+  RUN_TEST(testDriver_TurnOffAnyLed, 61);
+  RUN_TEST(testDriver_AllOnLed, 71);
+  RUN_TEST(testDriver_LedsStatus, 82);
+  RUN_TEST(testDriver_LedsLimits, 94);
+  RUN_TEST(testDriver_LedsDataVeri, 106);
 
   return (UnityEnd());
 }

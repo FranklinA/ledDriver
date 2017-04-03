@@ -3,12 +3,36 @@
 	<FailedTests/>
 	<SuccessfulTests>
 		<Test id="1">
-			<Name>test/test_ledDriver.c::testDriverCreateDebeApagarTodosLosLeds</Name>
+			<Name>test/test_ledDriver.c::testDriver_LedsOffAfterCreate</Name>
+		</Test>
+		<Test id="2">
+			<Name>test/test_ledDriver.c::testDriver_TurnOnledUno</Name>
+		</Test>
+		<Test id="3">
+			<Name>test/test_ledDriver.c::testDriver_TurnOffledUno</Name>
+		</Test>
+		<Test id="4">
+			<Name>test/test_ledDriver.c::testDriver_TurnOnMultiplesLeds</Name>
+		</Test>
+		<Test id="5">
+			<Name>test/test_ledDriver.c::testDriver_TurnOffAnyLed</Name>
+		</Test>
+		<Test id="6">
+			<Name>test/test_ledDriver.c::testDriver_AllOnLed</Name>
+		</Test>
+		<Test id="7">
+			<Name>test/test_ledDriver.c::testDriver_LedsStatus</Name>
+		</Test>
+		<Test id="8">
+			<Name>test/test_ledDriver.c::testDriver_LedsLimits</Name>
+		</Test>
+		<Test id="9">
+			<Name>test/test_ledDriver.c::testDriver_LedsDataVeri</Name>
 		</Test>
 	</SuccessfulTests>
 	<IgnoredTests/>
 	<Statistics>
-		<Tests>1</Tests>
+		<Tests>9</Tests>
 		<Ignores>0</Ignores>
 		<FailuresTotal>0</FailuresTotal>
 		<Errors>0</Errors>
