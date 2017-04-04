@@ -1,132 +1,119 @@
+/*
+Test 1 Todos los leds deben estar apagados después de inicializar el driver
+Test 2 Un led puede ser encendido individualmente
+Test 3 Un led puede ser apagado individualmente
+Test 4 Múltiple leds pueden ser encendidos/apagados
+Test 5 Apagar todos los leds
+Test 6 Encender todos los leds
+Test 7 Consulta del estado individual de un led
+Test 8 Verificación de valores límites
+Test 9 Verificación de valores fuera de límites
+*/
 #include "unity.h"
 #include "ledDriver.h"
 
-uint16_t address;
+static uint16_t virtualLeds;
 
 void setUp(){
-
+LedDriver_Create(&virtualLeds);
 }
+
 void tearDown(){
-//address=0;
-
 }
-/*El Test para que los LEDs esten inicializados correctamente*/
-void testDriver_LedsOffAfterCreate(){//Test1
-
+void testDriver_LedsOffAfterCreate()//Test 1 Todos los leds deben estar apagados después de inicializar el driver
+{
 	uint16_t virtualLeds=0xFFFF;//Para el Test 1 se deja ya que pone los inicializa en 1
 	LedDriver_Create(&virtualLeds);//funcion que quiero testear
-
 	TEST_ASSERT_EQUAL_HEX16(0,virtualLeds);
 }
-/*El Test para que el LED 1 este encendido 0x0001 (Req8)
- * es decir virtualLed a 1. Recordando el Req 2 y
- * Test2->Un led puede ser encendido individualmente y
- * Test3->Un led puede ser apagado individualmente*/
-void testDriver_TurnOnledUno(){//Test2
 
-	uint16_t virtualLeds=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
-	LedDriver_Create(&virtualLeds);//funcion que quiero testear
-    LedDriver_TurnOn(1);//Req 7->"1" Encendido/ "0" Apagado
-	TEST_ASSERT_EQUAL_HEX16(1,virtualLeds);
-
+void testDriver_TurnOnLedOne()//Test 2 Un led puede ser encendido individualmente
+{
+    LedDriver_TurnOn(1);
+    TEST_ASSERT_EQUAL_HEX16(1, virtualLeds);
 }
-/*El Test para que el LED 1 este encendido 0x0001 (Req8)
- * es decir virtualLed a 1. Recordando el Req 2 y
- * Test2->Un led puede ser encendido individualmente y
- * Test3->Un led puede ser apagado individualmente*/
-void testDriver_TurnOffledUno(){//Test3
-
-	uint16_t virtualLeds;//=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
-	LedDriver_Create(&virtualLeds);//funcion que quiero testear
-    LedDriver_TurnOn(1);//Req 7->"1" Encendido/ "0" Apagado
-    LedDriver_TurnOff(1);//Req 7->"1" Encendido/ "0" Apagado
-	TEST_ASSERT_EQUAL_HEX16(0,virtualLeds);
-
+void testDriver_TurnOffLedOne()//Test 3 Un led puede ser apagado individualmente
+{
+    LedDriver_TurnOn(1);
+    LedDriver_TurnOff(1);
+    TEST_ASSERT_EQUAL_HEX16(0, virtualLeds);
 }
-/*El Test para que el LED 1 este encendido 0x0001 (Req8)
- * es decir virtualLed a 1. Recordando el Req 2 y
- * Test2->Un led puede ser encendido individualmente y
- * Test3->Un led puede ser apagado individualmente
- * Test4->Multiples leds pueden ser encendidos/apagados*/
-void testDriver_TurnOnMultiplesLeds(){//Test4
 
-	uint16_t virtualLeds;//=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
-	LedDriver_Create(&virtualLeds);//funcion que quiero testear
-    LedDriver_TurnOn(9);//Req 7->"1" Encendido/ "0" Apagado
+void testDriver_TurnOnMultipleLeds()//Test 4 Multiples leds pueden ser encendidos
+{
+    LedDriver_TurnOn(9);
     LedDriver_TurnOn(8);
-    //LedDriver_TurnOff(1);//Req 7->"1" Encendido/ "0" Apagado
-	TEST_ASSERT_EQUAL_HEX16(0x180,virtualLeds);
-
+    TEST_ASSERT_EQUAL_HEX16(0x180, virtualLeds);
 }
-void testDriver_TurnOffAnyLed(){//Test5
 
-	uint16_t virtualLeds;//=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
-	LedDriver_Create(&virtualLeds);//funcion que quiero testear
-    LedDriver_TurnOn(9);//Req 7->"1" Encendido/ "0" Apagado
-    LedDriver_TurnOn(8);
-    LedDriver_TurnOff(8);//Req 7->"1" Encendido/ "0" Apagado
-	TEST_ASSERT_EQUAL_HEX16(0x100,virtualLeds);
-
+void testDriver_TurnOffMultipleLeds()//Test 4 Multiples leds pueden ser encendidos/apagados
+{
+    LedDriver_TurnAllOn();
+    LedDriver_TurnOff(9);
+    LedDriver_TurnOff(8);
+    TEST_ASSERT_EQUAL_HEX16((~0x180)&0xffff, virtualLeds);
 }
-void testDriver_AllOnLed(){//Test6
-	uint16_t virtualLeds;//=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
 
-	LedDriver_TurnAllOn();
-	TEST_ASSERT_EQUAL_HEX16(0xFFFF, virtualLeds);
+void testDriver_TurnOffAnyLed()//Test 4 Multiples leds pueden ser encendidos
+{
+    LedDriver_TurnAllOn();
+    LedDriver_TurnOff(8);
+    TEST_ASSERT_EQUAL_HEX16(0xff7f, virtualLeds);
 }
-void testDriver_LedsStatus(){//Test7
-	uint16_t virtualLeds=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
-	    LedDriver_TurnOff(1);
-	    LedDriver_TurnOff(2);
-	    LedDriver_TurnOff(3);
-	    LedDriver_TurnOff(4);
-	    LedDriver_TurnOff(5);
-	    LedDriver_TurnOff(6);
-	    LedDriver_TurnOff(7);
-	    LedDriver_TurnOff(9);
-	    LedDriver_TurnOff(10);
-	    LedDriver_TurnOff(11);
-	    LedDriver_TurnOff(12);
-	    LedDriver_TurnOff(13);
-	    LedDriver_TurnOff(14);
-	    LedDriver_TurnOff(15);
-	    LedDriver_TurnOff(16);
-		LedDriver_TurnOn(8);
-		TEST_ASSERT_EQUAL_HEX16(0x80, virtualLeds);
 
+void testDriver_AllOff()//Test 5_Apagar todos los leds
+{
+    LedDriver_TurnAllOn();
+    LedDriver_TurnAllOff();
+    TEST_ASSERT_EQUAL_HEX16(0, virtualLeds);
 }
-void testDriver_LedsLimits(){//Test8
-	uint16_t virtualLeds=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
 
-	LedDriver_TurnOff(2);
-	LedDriver_TurnOff(3);
-	LedDriver_TurnOff(4);
-	LedDriver_TurnOff(5);
-	LedDriver_TurnOff(6);
-	LedDriver_TurnOff(7);
-	LedDriver_TurnOff(8);
-	LedDriver_TurnOff(9);
-	LedDriver_TurnOff(10);
-	LedDriver_TurnOff(11);
-	LedDriver_TurnOff(12);
-	LedDriver_TurnOff(13);
-	LedDriver_TurnOff(14);
-	LedDriver_TurnOff(15);
-	LedDriver_TurnOn(1);
-	LedDriver_TurnOn(16);
-	TEST_ASSERT_EQUAL_HEX16(0x8001, virtualLeds);
-
-
+void testDriver_AllOn()//Test 6_Encender todos los leds
+{
+    LedDriver_TurnAllOn();
+    TEST_ASSERT_EQUAL_HEX16(0xffff, virtualLeds);
 }
-void testDriver_LedsDataVeri(){//Test9
-	uint16_t virtualLeds;//=0xFFFF;//Req 2,Req 5,Req 6 y Req 8.Para el Test 1 se deja ya que pone los inicializa en 1
-		LedDriver_Create(&virtualLeds);//funcion que quiero testear
-	 //   LedDriver_TurnOn(9);//Req 7->"1" Encendido/ "0" Apagado
-	    //LedDriver_TurnOn(8);
-	//    LedDriver_TurnOff(8);//Req 7->"1" Encendido/ "0" Apagado
-	//	TEST_ASSERT_EQUAL_HEX16(0x100,virtualLeds);
 
-	LedDriver_TurnAllOn();
-	TEST_ASSERT_EQUAL_HEX16(0xFFFF, virtualLeds);
-
+void testDriver_IsOn()//Test 7_Consulta Estado individual de un Led
+{
+    TEST_ASSERT_FALSE(LedDriver_IsOn(11));
+    LedDriver_TurnOn(11);
+    TEST_ASSERT_TRUE(LedDriver_IsOn(11));
 }
+
+void testDriver_IsOff()//Test 7_Consulta Estado individual de un Led
+{
+    TEST_ASSERT_TRUE(LedDriver_IsOff(12));
+    LedDriver_TurnOn(12);
+    TEST_ASSERT_FALSE(LedDriver_IsOff(12));
+}
+
+void testDriver_UpperAndLowerBounds()//Test 8 verificación de valores Límites
+{
+    LedDriver_TurnOn(1);
+    LedDriver_TurnOn(16);
+    TEST_ASSERT_EQUAL_HEX16(0x8001, virtualLeds);
+}
+
+void testDriver_OutOfBoundsLedsAreAlwaysOff()//Test 9 Verificación de valores fuera de Límites
+{
+    TEST_ASSERT_TRUE(LedDriver_IsOff(0));
+    TEST_ASSERT_TRUE(LedDriver_IsOff(17));
+    TEST_ASSERT_FALSE(LedDriver_IsOn(0));
+    TEST_ASSERT_FALSE(LedDriver_IsOn(17));
+}
+
+void testDriver_OutOfBoundsTurnOnDoesNoHarm()//Test 9 Verificación de valores fuera de Límites
+{
+    LedDriver_TurnOn(-1);
+    LedDriver_TurnOn(0);
+    LedDriver_TurnOn(17);
+    LedDriver_TurnOn(3141);
+    TEST_ASSERT_EQUAL_HEX16(0, virtualLeds);
+}
+
+
+
+
+
+
